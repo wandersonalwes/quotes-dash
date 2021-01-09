@@ -1,3 +1,5 @@
+import LeftMenu from '../components/LeftMenu'
+
 export default function Home () {
-  return <h1 className="text-red-500">Quotes</h1>
+  return <LeftMenu isOpen={false} />
 }
