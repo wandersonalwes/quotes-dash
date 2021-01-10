@@ -5,7 +5,7 @@ const sizeIcon = 'h-6 w-6'
 
 export const menuItems = [
   {
-    title: 'Home',
+    title: 'Dashboard',
     icon: <HiOutlineChartPie className={sizeIcon} />,
     destination: '/'
   },
