@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout'
 import Table from '@/components/Table'
 
-export default function Home () {
+export default function Quotes () {
   return (
     <Layout>
       <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
