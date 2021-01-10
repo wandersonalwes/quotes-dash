@@ -1,30 +1,12 @@
 import Layout from '@/components/Layout'
-import Card from '@/components/Card'
-import { cardItems } from '@/utils/cardItems'
 import Table from '@/components/Table'
 
 export default function Home () {
   return (
-
     <Layout>
       <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
         <div className="container mx-auto px-6 py-8">
-          <h3 className="text-gray-700 text-3xl font-medium">Dashboard</h3>
-
-          <div className="mt-4">
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-
-              {cardItems.map(({ title, subTitle, icon, bgIcon }) => (
-                <Card
-                  key={title}
-                  title={title}
-                  subtitle={subTitle}
-                  icon={icon}
-                  bgIcon={bgIcon} />
-              ))}
-
-            </div>
-          </div>
+          <h3 className="text-gray-700 text-3xl font-medium">Frases</h3>
           <div className="mt-8"></div>
           <div className="flex flex-col mt-8">
             <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
