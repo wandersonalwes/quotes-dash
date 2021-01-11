@@ -1,7 +1,9 @@
 import { NextApiResponse } from 'next'
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
+import Adapters from 'next-auth/adapters'
 import { NextApiRequest } from 'next-auth/_utils'
+import prisma from '@/lib/prisma'
 
 const options = {
   providers: [
@@ -15,7 +17,15 @@ const options = {
     })
   ],
 
-  database: process.env.DATABASE_URL
+  adapter: Adapters.Prisma.Adapter({
+    prisma,
+    modelMapping: {
+      User: 'user',
+      Account: 'account',
+      Session: 'session',
+      VerificationRequest: 'verificationRequest'
+    }
+  })
 }
 
 export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options)
