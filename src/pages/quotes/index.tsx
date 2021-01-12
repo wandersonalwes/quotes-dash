@@ -1,29 +1,25 @@
 import Layout from '@/components/Layout'
-import Card from '@/components/Card'
-import { cardItems } from '@/utils/cardItems'
 import Table from '@/components/Table'
+import Button from '@/components/Button'
 import HeaderPage from '@/components/HeaderPage'
+import { useRouter } from 'next/router'
 
-export default function Home () {
+export default function Quotes () {
+  const router = useRouter()
+
   return (
-
     <Layout>
-      <HeaderPage title="Dashboard" />
+      <HeaderPage
+        title="Frases"
+        rightContent={
+          <Button
+            onClick={() => router.push('/quotes/create')}
+            title="Nova Frase"
+            variant="primary"
+          />
+        }
+      />
 
-      <div className="mt-4">
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-
-          {cardItems.map(({ title, subTitle, icon, bgIcon }) => (
-            <Card
-              key={title}
-              title={title}
-              subtitle={subTitle}
-              icon={icon}
-              bgIcon={bgIcon} />
-          ))}
-
-        </div>
-      </div>
       <div className="mt-8"></div>
       <div className="flex flex-col mt-8">
         <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
