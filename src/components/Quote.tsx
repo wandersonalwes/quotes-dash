@@ -9,10 +9,12 @@ import QuoteSchema from '@/validations/QuoteSchema'
 import { BsX } from 'react-icons/bs'
 
 interface QuoteProps {
-  quote?: any
+  quote?: any | null
 }
 
 const Quote: FC<QuoteProps> = ({ quote }) => {
+  const isQuote = typeof quote !== 'undefined'
+
   const [searchCategories, setSearchCategories] = useState('')
 
   const categories = ['categoria1', 'categoria2', 'categoria3']
@@ -22,8 +24,8 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
     <Layout>
       <Formik
         initialValues={{
-          content: '' || quote.content,
-          categories: ['categoria1']
+          content: isQuote ? quote.content : '',
+          categories: []
         }}
         validationSchema={QuoteSchema}
         onSubmit={(values) => console.log(values)}
@@ -32,7 +34,7 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
 
           <Form>
             <HeaderPage
-              title={quote.id || 'Nova Frase'}
+              title={isQuote ? quote.id : 'Nova Frase'}
               rightContent={
                 <Fragment>
                   <Button title="Salvar" variant="outline-primary" className="mr-2" />
@@ -50,7 +52,7 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
                   onChange={handleChange('content')}
                   placeholder="Adicione uma frase aqui..."
                   rows={5}
-                  errorMessage={errors.content && touched.content && errors.content}
+                  errorMessage={errors.content && touched.content && errors.content.toString()}
                 />
               </div>
               <div className="col-span-3 md:col-span-1">
