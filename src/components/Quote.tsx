@@ -1,4 +1,4 @@
-import { FC, useState, Fragment } from 'react'
+import { FC, useState } from 'react'
 import Layout from '@/components/Layout'
 import Button from '@/components/Button'
 import Checkbox from '@/components/Checkbox'
@@ -30,17 +30,18 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
         validationSchema={QuoteSchema}
         onSubmit={(values) => console.log(values)}
       >
-        {({ values, handleChange, errors, touched }) => (
+        {({ values, handleChange, errors }) => (
 
           <Form>
             <HeaderPage
               title={isQuote ? quote.id : 'Nova Frase'}
               rightContent={
-                <Fragment>
-                  <Button title="Salvar" variant="outline-primary" className="mr-2" />
-                  <Button title="Publicar" variant="primary" type="submit" />
-                </Fragment>
-              }
+                <Button
+                  title="Publicar"
+                  variant="primary"
+                  type="submit"
+                  disabled={!!(errors.content || errors.categories || !values.content)}
+                />}
             />
 
             <div className="grid grid-cols-3 mt-8 gap-4">
@@ -52,7 +53,7 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
                   onChange={handleChange('content')}
                   placeholder="Adicione uma frase aqui..."
                   rows={5}
-                  errorMessage={errors.content && touched.content && errors.content.toString()}
+                  errorMessage={errors.content && errors.content.toString()}
                 />
               </div>
               <div className="col-span-3 md:col-span-1">
@@ -112,7 +113,7 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
 
                   </div>
 
-                  <p className="text-xs text-red-500 mt-1">{errors.categories && touched.categories && errors.categories}</p>
+                  <p className="text-xs text-red-500 mt-1">{errors.categories && errors.categories}</p>
                 </div>
               </div>
             </div>
