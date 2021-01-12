@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Layout from '@/components/Layout'
 import Table from '@/components/Table'
 import Button from '@/components/Button'
@@ -39,7 +40,9 @@ export default function Quotes () {
                   </td>
                   <td
                     className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                    <a href="#" className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                    <Link href="/quotes/1">
+                      <a className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                    </Link>
                   </td>
                 </tr>
               </tbody>
