@@ -60,3 +60,23 @@ model VerificationRequest {
 
   @@map("verification_requests")
 }
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  quotes    Quote[]
+
+  @@map("categories")
+}
+
+model Quote {
+  id         Int        @id @default(autoincrement())
+  content    String
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @default(now()) @map("updated_at")
+  categories Category[]
+
+  @@map("quotes")
+}

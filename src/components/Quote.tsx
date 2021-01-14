@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, Fragment, useState } from 'react'
 import Layout from '@/components/Layout'
 import Button from '@/components/Button'
 import Checkbox from '@/components/Checkbox'
@@ -7,41 +7,94 @@ import HeaderPage from '@/components/HeaderPage'
 import { Formik, Form, Field } from 'formik'
 import QuoteSchema from '@/validations/QuoteSchema'
 import { BsX } from 'react-icons/bs'
+import { useRouter } from 'next/router'
+import { quoteAPI } from '@/lib/api'
+import { CreateQuoteData, QuoteData } from '@/domain/quote'
+import { CategoryData } from '@/domain/category'
 
 interface QuoteProps {
-  quote?: any | null
+  quote?: QuoteData
+  categories: CategoryData[]
 }
 
-const Quote: FC<QuoteProps> = ({ quote }) => {
+interface UpdateQuoteData {
+  content: string
+  selectedCategories: string[]
+}
+
+const Quote: FC<QuoteProps> = ({ quote, categories }) => {
   const isQuote = typeof quote !== 'undefined'
-
+  const router = useRouter()
+  const currentCategoryNames = quote?.categories.map(({ name }) => name)
   const [searchCategories, setSearchCategories] = useState('')
+  const filteredCategories = categories.filter(({ name }) => name.indexOf(searchCategories) > -1)
 
-  const categories = ['categoria1', 'categoria2', 'categoria3']
+  const handleQuote = {
+    create: async (data: CreateQuoteData) => {
+      await quoteAPI.create(data)
+      router.push('/quotes')
+    },
+    update: async (id: number, data: UpdateQuoteData) => {
+      const { content, selectedCategories } = data
 
-  const filteredCategories = categories.filter(category => category.indexOf(searchCategories) > -1)
+      const connectCategories = selectedCategories.filter(selectedCategoryName => {
+        return !currentCategoryNames.some((currentCategoryName: string) => currentCategoryName === selectedCategoryName)
+      })
+
+      const disconnectCategories = currentCategoryNames.filter((categoryName: string) => {
+        return !selectedCategories.some(selectedCategory => selectedCategory === categoryName)
+      })
+
+      await quoteAPI.update(id, {
+        content,
+        connectCategories,
+        disconnectCategories
+      })
+
+      router.push('/quotes')
+    },
+    delete: async (id: number) => {
+      await quoteAPI.delete(id)
+      router.push('/quotes')
+    }
+  }
+
   return (
     <Layout>
       <Formik
         initialValues={{
           content: isQuote ? quote.content : '',
-          categories: []
+          selectedCategories: isQuote ? currentCategoryNames : []
         }}
         validationSchema={QuoteSchema}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={({ content, selectedCategories }) => isQuote
+          ? handleQuote.update(quote.id, { content, selectedCategories })
+          : handleQuote.create({ content, connectCategories: selectedCategories })}
       >
         {({ values, handleChange, errors }) => (
 
           <Form>
             <HeaderPage
-              title={isQuote ? quote.id : 'Nova Frase'}
+              title={isQuote ? String(quote.id) : 'Nova Frase'}
               rightContent={
-                <Button
-                  title="Publicar"
-                  variant="primary"
-                  type="submit"
-                  disabled={!!(errors.content || errors.categories || !values.content)}
-                />}
+                <Fragment>
+                  {isQuote && (
+                    <button
+                      type="button"
+                      className="text-lg uppercase text-pink-500 mr-4"
+                      onClick={() => handleQuote.delete(quote.id)}
+                    >
+                      Deletar
+                    </button>
+                  )}
+                  <Button
+                    title={isQuote ? 'Atualizar' : 'Publicar'}
+                    variant="primary"
+                    type="submit"
+                    disabled={!!(errors.content || errors.selectedCategories || !values.content)}
+                  />
+                </Fragment>
+              }
             />
 
             <div className="grid grid-cols-3 mt-8 gap-4">
@@ -85,20 +138,19 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
                       <div className="dropdown-content z-50 mt-1 w-full rounded bg-white border overflow-x-hidden max-h-56">
                         <ul className="block">
 
-                          {filteredCategories.map(category => (
-                            <li key={category} className="flex border-b last:border-b-0">
-                              <label className="flex items-center px-4 py-2 w-full h-full cursor-pointer" htmlFor={category}>
+                          {filteredCategories.map((category) => (
+                            <li key={category.name} className="flex border-b last:border-b-0">
+                              <label className="flex items-center px-4 py-2 w-full h-full cursor-pointer" htmlFor={category.name}>
 
                                 <Field
-                                  id={category}
-                                  name="categories"
-                                  value={category}
+                                  id={category.name}
+                                  name="selectedCategories"
+                                  value={category.name}
                                   component={Checkbox}
-                                  onChange={handleChange('categories')}
-                                  checked={values.categories.includes(category)}
+                                  onChange={handleChange('selectedCategories')}
+                                  checked={values.selectedCategories.includes(category.name)}
                                 />
-
-                                <p className="text-sm text-gray-800 ml-2">{category}</p>
+                                <p className="text-sm text-gray-800 ml-2">{category.name}</p>
                               </label>
                             </li>
                           ))}
@@ -113,7 +165,7 @@ const Quote: FC<QuoteProps> = ({ quote }) => {
 
                   </div>
 
-                  <p className="text-xs text-red-500 mt-1">{errors.categories && errors.categories}</p>
+                  <p className="text-xs text-red-500 mt-1">{errors.selectedCategories && errors.selectedCategories}</p>
                 </div>
               </div>
             </div>

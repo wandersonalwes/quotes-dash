@@ -5,7 +5,7 @@ type CheckboxProps = InputHTMLAttributes<HTMLInputElement>
 const Checkbox: FC<CheckboxProps> = ({ ...rest }) => {
   return (
     <>
-      <input type="checkbox" className="input-check appearance-none checked:bg-blue-600 checked:border-transparent p-2 border rounded-sm outline-none cursor-pointer" {...rest} />
+      <input type="checkbox" className="input-check appearance-none checked:bg-blue-600 checked:border-transparent p-2 border rounded-sm outline-none cursor-pointer " {...rest} />
 
       <style jsx>{`
       .input-check:checked {

@@ -4,8 +4,25 @@ import Table from '@/components/Table'
 import HeaderPage from '@/components/HeaderPage'
 import Button from '@/components/Button'
 import { useRouter } from 'next/router'
+import { GetServerSideProps } from 'next'
+import { categoryAPI } from '@/lib/api'
+import { CategoryData } from '@/domain/category'
 
-export default function Categories () {
+export const getServerSideProps: GetServerSideProps = async () => {
+  const categories = await categoryAPI.findAll()
+
+  return {
+    props: {
+      categories
+    }
+  }
+}
+
+interface CategoriesProps {
+  categories: CategoryData[]
+}
+
+export default function Categories ({ categories }: CategoriesProps) {
   const router = useRouter()
 
   return (
@@ -21,19 +38,21 @@ export default function Categories () {
             <Table columns={['ID', 'Nome', '']}>
 
               <tbody className="bg-white">
-                <tr>
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200 w-16">1</td>
+                {categories.length > 0 && categories.map(({ id, name }) => (
+                  <tr key={id} className="border-b border-gray-200">
+                    <td className="px-6 py-4 whitespace-no-wrap  w-16">{id}</td>
 
-                  <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200  w-32 block">
-                    <p className="truncate">Amor</p>
-                  </td>
-                  <td
-                    className="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
-                    <Link href="/categories/1">
-                      <a className="text-indigo-600 hover:text-indigo-900">Editar</a>
-                    </Link>
-                  </td>
-                </tr>
+                    <td className="px-6 py-4 whitespace-no-wrap w-32 block">
+                      <p className="truncate">{name}</p>
+                    </td>
+                    <td
+                      className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
+                      <Link href={`/categories/${id}`}>
+                        <a className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>
