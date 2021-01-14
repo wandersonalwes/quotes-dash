@@ -74,7 +74,7 @@ model Category {
 
 model Quote {
   id         Int        @id @default(autoincrement())
-  content    String
+  content    String     @unique
   createdAt  DateTime   @default(now()) @map("created_at")
   updatedAt  DateTime   @default(now()) @map("updated_at")
   userId     Int        @map("user_id")
