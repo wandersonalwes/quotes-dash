@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { quoteAPI } from '@/lib/api'
 import { CreateQuoteData, QuoteData } from '@/domain/quote'
 import { CategoryData } from '@/domain/category'
+import { toast } from 'react-toastify'
 
 interface QuoteProps {
   quote?: QuoteData
@@ -27,31 +28,47 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
 
   const handleQuote = {
     create: async (data: CreateQuoteData) => {
-      await quoteAPI.create(data)
-      router.push('/quotes')
+      try {
+        await quoteAPI.create(data)
+
+        toast.success('Frase adicionada com sucesso')
+        router.push('/quotes')
+      } catch (error) {
+        toast.error('Error interno do servidor')
+      }
     },
     update: async (id: number, data: UpdateQuoteData) => {
-      const { content, selectedCategories } = data
+      try {
+        const { content, selectedCategories } = data
 
-      const connectCategories = selectedCategories.filter(selectedCategoryName => {
-        return !currentCategoryNames.some((currentCategoryName: string) => currentCategoryName === selectedCategoryName)
-      })
+        const connectCategories = selectedCategories.filter(selectedCategoryName => {
+          return !currentCategoryNames.some((currentCategoryName: string) => currentCategoryName === selectedCategoryName)
+        })
 
-      const disconnectCategories = currentCategoryNames.filter((categoryName: string) => {
-        return !selectedCategories.some(selectedCategory => selectedCategory === categoryName)
-      })
+        const disconnectCategories = currentCategoryNames.filter((categoryName: string) => {
+          return !selectedCategories.some(selectedCategory => selectedCategory === categoryName)
+        })
 
-      await quoteAPI.update(id, {
-        content,
-        connectCategories,
-        disconnectCategories
-      })
+        await quoteAPI.update(id, {
+          content,
+          connectCategories,
+          disconnectCategories
+        })
 
-      router.push('/quotes')
+        toast.success('Frase atualizada com sucesso')
+        router.push('/quotes')
+      } catch (error) {
+        toast.error('Error interno do servidor')
+      }
     },
     delete: async (id: number) => {
-      await quoteAPI.delete(id)
-      router.push('/quotes')
+      try {
+        await quoteAPI.delete(id)
+        toast.success('Frase excluída com sucesso')
+        router.push('/quotes')
+      } catch (error) {
+        toast.error('Error interno do servidor')
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import CategorySchema from '@/validations/CategorySchema'
 import { useRouter } from 'next/router'
 import { CategoryData } from '@/domain/category'
 import { categoryAPI } from '@/lib/api'
+import { toast } from 'react-toastify'
 
 interface CategoryProps {
   category?: CategoryData
@@ -17,16 +18,34 @@ const Category: FC<CategoryProps> = ({ category }) => {
 
   const handleCategory = {
     create: async (name: string) => {
-      await categoryAPI.create({ name })
-      router.push('/categories')
+      try {
+        await categoryAPI.create({ name })
+
+        toast.success('Categoria adicionada com sucesso')
+        router.push('/categories')
+      } catch (error) {
+        toast.error('Error interno do servidor')
+      }
     },
     update: async (id: number, name: string) => {
-      await categoryAPI.update(id, { name })
-      router.push('/categories')
+      try {
+        await categoryAPI.update(id, { name })
+
+        toast.success('Categoria adicionada com sucesso')
+        router.push('/categories')
+      } catch (error) {
+        toast.error('Error interno do servidor')
+      }
     },
     delete: async (id: number) => {
-      await categoryAPI.delete(id)
-      router.push('/categories')
+      try {
+        await categoryAPI.delete(id)
+
+        toast.success('Categoria adicionada com sucesso')
+        router.push('/categories')
+      } catch (error) {
+        toast.error('Error interno do servidor')
+      }
     }
   }
 
