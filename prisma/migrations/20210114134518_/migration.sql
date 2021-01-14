@@ -104,6 +104,9 @@ CREATE UNIQUE INDEX "users.email_unique" ON "users"("email");
 CREATE UNIQUE INDEX "verification_requests.token_unique" ON "verification_requests"("token");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "categories.name_unique" ON "categories"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_CategoryToQuote_AB_unique" ON "_CategoryToQuote"("A", "B");
 
 -- CreateIndex
