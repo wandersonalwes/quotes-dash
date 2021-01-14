@@ -46,6 +46,7 @@ model User {
   image         String?
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @default(now()) @map("updated_at")
+  Quote         Quote[]
 
   @@map("users")
 }
@@ -76,6 +77,8 @@ model Quote {
   content    String
   createdAt  DateTime   @default(now()) @map("created_at")
   updatedAt  DateTime   @default(now()) @map("updated_at")
+  userId     Int        @map("user_id")
+  user       User       @relation(fields: [userId], references: [id])
   categories Category[]
 
   @@map("quotes")

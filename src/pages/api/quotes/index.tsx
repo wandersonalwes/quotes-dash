@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/lib/prisma'
+import { getSession } from 'next-auth/client'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -23,6 +24,8 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     case 'POST': {
       const { content, connectCategories } = req.body
 
+      const session = await getSession({ req })
+
       const quote = await prisma.quote.create({
         data: {
           content,
@@ -30,6 +33,9 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
             connect: connectCategories.map((categoryName: string) => ({
               name: categoryName
             }))
+          },
+          user: {
+            connect: { email: session?.user?.email }
           }
         }
       })
