@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import { categoryAPI } from '@/lib/api'
 import { CategoryData } from '@/domain/category'
+import { useSession } from 'next-auth/client'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categories = await categoryAPI.findAll()
@@ -23,7 +24,16 @@ interface CategoriesProps {
 }
 
 export default function Categories ({ categories }: CategoriesProps) {
+  const [session, loading] = useSession()
   const router = useRouter()
+
+  if (loading) {
+    return <div>Carregando...</div>
+  }
+
+  if (!session) {
+    return router.push('/api/auth/signin')
+  }
 
   return (
     <Layout>

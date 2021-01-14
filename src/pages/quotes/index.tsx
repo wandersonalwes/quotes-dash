@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import { QuoteData } from '@/domain/quote'
 import { quoteAPI } from '@/lib/api'
+import { useSession } from 'next-auth/client'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const quotes = await quoteAPI.findAll()
@@ -23,7 +24,16 @@ interface QuotesProps {
 }
 
 export default function Quotes ({ quotes }: QuotesProps) {
+  const [session, loading] = useSession()
   const router = useRouter()
+
+  if (loading) {
+    return <div>Carregando...</div>
+  }
+
+  if (!session) {
+    return router.push('/api/auth/signin')
+  }
 
   return (
     <Layout>
