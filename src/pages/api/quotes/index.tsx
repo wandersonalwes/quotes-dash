@@ -26,21 +26,25 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
 
       const session = await getSession({ req })
 
-      const quote = await prisma.quote.create({
-        data: {
-          content,
-          categories: {
-            connect: connectCategories.map((categoryName: string) => ({
-              name: categoryName
-            }))
-          },
-          user: {
-            connect: { email: session?.user?.email }
+      if (session) {
+        const quote = await prisma.quote.create({
+          data: {
+            content,
+            categories: {
+              connect: connectCategories.map((categoryName: string) => ({
+                name: categoryName
+              }))
+            },
+            user: {
+              connect: { email: session.user.email }
+            }
           }
-        }
-      })
+        })
 
-      return res.json(quote.id)
+        return res.json(quote.id)
+      } else {
+        return res.status(401)
+      }
     }
 
     default: {
