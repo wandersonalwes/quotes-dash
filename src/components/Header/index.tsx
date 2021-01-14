@@ -35,7 +35,7 @@ const Header = () => {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="relative block h-8 w-8 rounded-full overflow-hidden shadow focus:outline-none">
 
-            <Avatar src={session.user.image} />
+            <Avatar src={session && session.user.image} />
           </button>
 
           {dropdownOpen && (
