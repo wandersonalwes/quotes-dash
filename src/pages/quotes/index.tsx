@@ -9,6 +9,7 @@ import { QuoteData } from '@/domain/quote'
 import { quoteAPI } from '@/lib/api'
 import { useSession } from 'next-auth/client'
 import AccessDenied from '@/components/AccessDenied'
+import Loading from '@/components/Loading'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const quotes = await quoteAPI.findAll()
@@ -29,7 +30,7 @@ export default function Quotes ({ quotes }: QuotesProps) {
   const router = useRouter()
 
   if (loading) {
-    return <div>Carregando...</div>
+    return <Loading />
   }
 
   if (!session) {

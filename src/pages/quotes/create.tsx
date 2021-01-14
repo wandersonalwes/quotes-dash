@@ -3,6 +3,7 @@ import { categoryAPI } from '@/lib/api'
 import { GetServerSideProps } from 'next'
 import { useSession } from 'next-auth/client'
 import AccessDenied from '@/components/AccessDenied'
+import Loading from '@/components/Loading'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categories = await categoryAPI.findAll()
@@ -18,7 +19,7 @@ const QuotePage = ({ categories }) => {
   const [session, loading] = useSession()
 
   if (loading) {
-    return <div>Carregando...</div>
+    return <Loading />
   }
 
   if (!session) {

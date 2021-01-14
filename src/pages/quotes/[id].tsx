@@ -1,4 +1,5 @@
 import AccessDenied from '@/components/AccessDenied'
+import Loading from '@/components/Loading'
 import Quote from '@/components/Quote'
 import { categoryAPI, quoteAPI } from '@/lib/api'
 import { GetServerSideProps } from 'next'
@@ -20,7 +21,7 @@ const QuotePage = ({ categories, quote }) => {
   const [session, loading] = useSession()
 
   if (loading) {
-    return <div>Carregando...</div>
+    return <Loading />
   }
 
   if (!session) {

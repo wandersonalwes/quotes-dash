@@ -1,12 +1,13 @@
 import Category from '@/components/Category'
 import { useSession } from 'next-auth/client'
 import AccessDenied from '@/components/AccessDenied'
+import Loading from '@/components/Loading'
 
 const CategoryPage = () => {
   const [session, loading] = useSession()
 
   if (loading) {
-    return <div>Carregando...</div>
+    return <Loading />
   }
 
   if (!session) {

@@ -10,6 +10,7 @@ import { HiOutlineViewGridAdd, HiOutlineUsers } from 'react-icons/hi'
 import { QuoteData } from '@/domain/quote'
 import { useSession } from 'next-auth/client'
 import AccessDenied from '@/components/AccessDenied'
+import Loading from '@/components/Loading'
 
 const cardIconClasses = 'w-8 h-8 text-white'
 
@@ -37,7 +38,7 @@ export default function Home ({ categoriesTotal, quotesTotal, quotes }: Props) {
   const [session, loading] = useSession()
 
   if (loading) {
-    return <div>Carregando...</div>
+    return <Loading />
   }
 
   if (!session) {

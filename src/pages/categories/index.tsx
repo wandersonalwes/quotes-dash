@@ -9,6 +9,7 @@ import { categoryAPI } from '@/lib/api'
 import { CategoryData } from '@/domain/category'
 import { useSession } from 'next-auth/client'
 import AccessDenied from '@/components/AccessDenied'
+import Loading from '@/components/Loading'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categories = await categoryAPI.findAll()
@@ -29,7 +30,7 @@ export default function Categories ({ categories }: CategoriesProps) {
   const router = useRouter()
 
   if (loading) {
-    return <div>Carregando...</div>
+    return <Loading />
   }
 
   if (!session) {
