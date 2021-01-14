@@ -8,6 +8,7 @@ import { GetServerSideProps } from 'next'
 import { categoryAPI } from '@/lib/api'
 import { CategoryData } from '@/domain/category'
 import { useSession } from 'next-auth/client'
+import AccessDenied from '@/components/AccessDenied'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categories = await categoryAPI.findAll()
@@ -32,7 +33,7 @@ export default function Categories ({ categories }: CategoriesProps) {
   }
 
   if (!session) {
-    return router.push('/api/auth/signin')
+    return <AccessDenied />
   }
 
   return (

@@ -9,7 +9,7 @@ import { BsChatSquareQuote } from 'react-icons/bs'
 import { HiOutlineViewGridAdd, HiOutlineUsers } from 'react-icons/hi'
 import { QuoteData } from '@/domain/quote'
 import { useSession } from 'next-auth/client'
-import { useRouter } from 'next/router'
+import AccessDenied from '@/components/AccessDenied'
 
 const cardIconClasses = 'w-8 h-8 text-white'
 
@@ -35,14 +35,13 @@ type Props = {
 
 export default function Home ({ categoriesTotal, quotesTotal, quotes }: Props) {
   const [session, loading] = useSession()
-  const router = useRouter()
 
   if (loading) {
     return <div>Carregando...</div>
   }
 
   if (!session) {
-    return router.push('/api/auth/signin')
+    return <AccessDenied />
   }
 
   return (

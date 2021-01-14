@@ -8,6 +8,7 @@ import { GetServerSideProps } from 'next'
 import { QuoteData } from '@/domain/quote'
 import { quoteAPI } from '@/lib/api'
 import { useSession } from 'next-auth/client'
+import AccessDenied from '@/components/AccessDenied'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const quotes = await quoteAPI.findAll()
@@ -32,7 +33,7 @@ export default function Quotes ({ quotes }: QuotesProps) {
   }
 
   if (!session) {
-    return router.push('/api/auth/signin')
+    return <AccessDenied />
   }
 
   return (
