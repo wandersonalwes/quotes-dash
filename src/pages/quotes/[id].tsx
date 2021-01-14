@@ -1,6 +1,4 @@
-import AccessDenied from '@/components/AccessDenied'
-import Loading from '@/components/Loading'
-import Quote from '@/components/Quote'
+import { Quote, AccessDenied, Loading } from '@/components'
 import { categoryAPI, quoteAPI } from '@/lib/api'
 import { GetServerSideProps } from 'next'
 import { useSession } from 'next-auth/client'

@@ -1,7 +1,5 @@
-import Category from '@/components/Category'
+import { Category, AccessDenied, Loading } from '@/components'
 import { useSession } from 'next-auth/client'
-import AccessDenied from '@/components/AccessDenied'
-import Loading from '@/components/Loading'
 
 const CategoryPage = () => {
   const [session, loading] = useSession()

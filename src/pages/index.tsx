@@ -1,16 +1,11 @@
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
-import Layout from '@/components/Layout'
-import Card from '@/components/Card'
-import Table from '@/components/Table'
-import HeaderPage from '@/components/HeaderPage'
 import { categoryAPI, quoteAPI } from '@/lib/api'
 import { BsChatSquareQuote } from 'react-icons/bs'
 import { HiOutlineViewGridAdd, HiOutlineUsers } from 'react-icons/hi'
 import { QuoteData } from '@/domain/quote'
 import { useSession } from 'next-auth/client'
-import AccessDenied from '@/components/AccessDenied'
-import Loading from '@/components/Loading'
+import { Layout, AccessDenied, HeaderPage, Loading, Table, Card } from '@/components'
 
 const cardIconClasses = 'w-8 h-8 text-white'
 

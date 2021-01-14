@@ -1,15 +1,10 @@
 import Link from 'next/link'
-import Layout from '@/components/Layout'
-import Table from '@/components/Table'
-import HeaderPage from '@/components/HeaderPage'
-import Button from '@/components/Button'
+import { Layout, Table, HeaderPage, Button, AccessDenied, Loading } from '@/components'
 import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import { categoryAPI } from '@/lib/api'
 import { CategoryData } from '@/domain/category'
 import { useSession } from 'next-auth/client'
-import AccessDenied from '@/components/AccessDenied'
-import Loading from '@/components/Loading'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categories = await categoryAPI.findAll()

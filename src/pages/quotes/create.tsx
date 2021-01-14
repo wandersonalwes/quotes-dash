@@ -1,9 +1,7 @@
-import Quote from '@/components/Quote'
+import { Quote, AccessDenied, Loading } from '@/components'
 import { categoryAPI } from '@/lib/api'
 import { GetServerSideProps } from 'next'
 import { useSession } from 'next-auth/client'
-import AccessDenied from '@/components/AccessDenied'
-import Loading from '@/components/Loading'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const categories = await categoryAPI.findAll()
