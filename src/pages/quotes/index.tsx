@@ -59,7 +59,7 @@ export default function Quotes ({ quotes }: QuotesProps) {
               <tbody className="bg-white">
                 {quotes.length > 0 && quotes.map(({ id, content }) => (
                   <tr key={id} className="border-b border-gray-200">
-                    <td className="px-6 py-4 whitespace-no-wrap ">1</td>
+                    <td className="px-6 py-4 whitespace-no-wrap ">{id}</td>
 
                     <td className="px-6 py-4 whitespace-no-wrap w-64 block">
                       <p className="truncate">{content}</p>
