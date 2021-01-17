@@ -15,6 +15,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         }
       })
 
+      if (!quote) {
+        return res.status(404).json({ error: 'Frase não encontrada' })
+      }
+
       return res.json(quote)
     }
 
