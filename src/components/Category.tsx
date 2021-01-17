@@ -19,7 +19,11 @@ const Category: FC<CategoryProps> = ({ category }) => {
   const handleCategory = {
     create: async (name: string) => {
       try {
-        await categoryAPI.create({ name })
+        const response = await categoryAPI.create({ name })
+
+        if (response.error) {
+          return toast.error(response.error)
+        }
 
         toast.success('Categoria adicionada com sucesso')
         router.push('/categories')
@@ -29,7 +33,11 @@ const Category: FC<CategoryProps> = ({ category }) => {
     },
     update: async (id: number, name: string) => {
       try {
-        await categoryAPI.update(id, { name })
+        const response = await categoryAPI.update(id, { name })
+
+        if (response.error) {
+          return toast.error(response.error)
+        }
 
         toast.success('Categoria atualizada com sucesso')
         router.push('/categories')

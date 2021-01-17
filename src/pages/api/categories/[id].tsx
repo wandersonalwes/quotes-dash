@@ -24,6 +24,16 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         return res.status(403).json({ error: 'Sem permissão para realizar está ação' })
       }
 
+      const categoryExists = await prisma.category.findUnique({
+        where: {
+          name
+        }
+      })
+
+      if (categoryExists) {
+        return res.status(400).json({ error: 'Categoria já existe' })
+      }
+
       const category = await prisma.category.update({
         where: {
           id: categoryId
