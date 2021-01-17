@@ -31,7 +31,7 @@ const Category: FC<CategoryProps> = ({ category }) => {
       try {
         await categoryAPI.update(id, { name })
 
-        toast.success('Categoria adicionada com sucesso')
+        toast.success('Categoria atualizada com sucesso')
         router.push('/categories')
       } catch (error) {
         toast.error('Error interno do servidor')
@@ -41,7 +41,7 @@ const Category: FC<CategoryProps> = ({ category }) => {
       try {
         await categoryAPI.delete(id)
 
-        toast.success('Categoria adicionada com sucesso')
+        toast.success('Categoria excluída com sucesso')
         router.push('/categories')
       } catch (error) {
         toast.error('Error interno do servidor')
