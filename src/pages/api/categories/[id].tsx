@@ -1,8 +1,10 @@
 import prisma from '../../../lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getSession } from 'next-auth/client'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   const categoryId = Number(req.query.id)
+  const session = await getSession({ req })
 
   switch (req.method) {
     case 'GET': {
@@ -18,6 +20,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     case 'PUT': {
       const { name } = req.body
 
+      if (!session.user.isAdmin) {
+        return res.status(403).json({ error: 'Sem permissão para realizar está ação' })
+      }
+
       const category = await prisma.category.update({
         where: {
           id: categoryId
@@ -31,6 +37,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     }
 
     case 'DELETE': {
+      if (!session.user.isAdmin) {
+        return res.status(403).json({ error: 'Sem permissão para realizar está ação' })
+      }
+
       const category = await prisma.category.delete({
         where: {
           id: categoryId

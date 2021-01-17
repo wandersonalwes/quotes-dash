@@ -1,5 +1,6 @@
 import { Category, AccessDenied, Loading } from '@/components'
 import { useSession } from 'next-auth/client'
+import Error from 'next/error'
 
 const CategoryPage = () => {
   const [session, loading] = useSession()
@@ -10,6 +11,10 @@ const CategoryPage = () => {
 
   if (!session) {
     return <AccessDenied />
+  }
+
+  if (!session.user.isAdmin) {
+    return <Error statusCode={404} />
   }
 
   return (
