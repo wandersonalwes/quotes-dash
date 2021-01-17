@@ -36,7 +36,7 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
               }))
             },
             user: {
-              connect: { email: session.user.email }
+              connect: { id: session.user.id }
             }
           }
         })
