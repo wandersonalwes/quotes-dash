@@ -14,6 +14,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         }
       })
 
+      if (!category) {
+        return res.status(404).json({ error: 'Frase não encontrada' })
+      }
+
       return res.json(category)
     }
 

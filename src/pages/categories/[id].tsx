@@ -2,7 +2,7 @@ import { Category, AccessDenied, Loading } from '@/components'
 import { categoryAPI } from '@/lib/api'
 import { GetServerSideProps } from 'next'
 import { useSession } from 'next-auth/client'
-import Error from 'next/error'
+import NextError from 'next/error'
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const category = await categoryAPI.findByID(params.id)
@@ -25,8 +25,8 @@ const CategoryPage = ({ category }) => {
     return <AccessDenied />
   }
 
-  if (!session.user.isAdmin) {
-    return <Error statusCode={404} />
+  if (!session.user.isAdmin || category.error) {
+    return <NextError statusCode={404} />
   }
 
   return (
