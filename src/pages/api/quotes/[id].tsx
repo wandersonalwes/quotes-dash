@@ -21,6 +21,16 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     case 'PUT': {
       const { content, connectCategories, disconnectCategories } = req.body
 
+      const quoteExists = await prisma.quote.findUnique({
+        where: {
+          content
+        }
+      })
+
+      if (quoteExists) {
+        return res.status(400).json({ error: 'Frase já existe' })
+      }
+
       const quote = await prisma.quote.update({
         where: {
           id: quoteId

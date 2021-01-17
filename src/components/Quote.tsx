@@ -29,7 +29,11 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
   const handleQuote = {
     create: async (data: CreateQuoteData) => {
       try {
-        await quoteAPI.create(data)
+        const response = await quoteAPI.create(data)
+
+        if (response.error) {
+          return toast.error(response.error)
+        }
 
         toast.success('Frase adicionada com sucesso')
         router.push('/quotes')
@@ -49,11 +53,15 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
           return !selectedCategories.some(selectedCategory => selectedCategory === categoryName)
         })
 
-        await quoteAPI.update(id, {
+        const response = await quoteAPI.update(id, {
           content,
           connectCategories,
           disconnectCategories
         })
+
+        if (response.error) {
+          return toast.error(response.error)
+        }
 
         toast.success('Frase atualizada com sucesso')
         router.push('/quotes')
