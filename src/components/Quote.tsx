@@ -113,6 +113,7 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
             <div className="grid grid-cols-3 mt-8 gap-4">
               <div className="col-span-3 md:col-span-2 bg-white shadow rounded py-4 px-6">
                 <Textarea
+                  autoFocus
                   name="content"
                   label="Conteúdo"
                   value={values.content}
