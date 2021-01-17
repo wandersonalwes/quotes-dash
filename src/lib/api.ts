@@ -17,7 +17,13 @@ const fetchAPI = async (endpoint: string, options?: FetchOptions) => {
     body: JSON.stringify(options.body)
   })
 
-  return await response.json()
+  const json = await response.json()
+
+  if (json.errors) {
+    console.error(json.errors)
+    throw new Error('Failed to fetch API')
+  }
+  return json
 }
 
 type ParamID = string | string[]
