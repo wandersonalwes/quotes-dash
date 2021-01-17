@@ -1,9 +1,10 @@
 import { NextApiResponse } from 'next'
-import NextAuth from 'next-auth'
+import NextAuth, { User } from 'next-auth'
 import Providers from 'next-auth/providers'
 import Adapters from 'next-auth/adapters'
 import { NextApiRequest } from 'next-auth/_utils'
 import prisma from '@/lib/prisma'
+import { Session } from 'next-auth/client'
 
 const options = {
   providers: [
@@ -21,7 +22,13 @@ const options = {
       Session: 'session',
       VerificationRequest: 'verificationRequest'
     }
-  })
+  }),
+  callbacks: {
+    session: async (session: Session, user: User) => {
+      session.user.id = user.id
+      return Promise.resolve(session)
+    }
+  }
 }
 
 export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, options)
