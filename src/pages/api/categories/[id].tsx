@@ -30,7 +30,13 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         }
       })
 
-      if (categoryExists) {
+      const currentCategory = await prisma.category.findUnique({
+        where: {
+          id: categoryId
+        }
+      })
+
+      if (categoryExists && currentCategory.name !== name) {
         return res.status(400).json({ error: 'Categoria já existe' })
       }
 
