@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
-import { categoryAPI, quoteAPI } from '@/lib/api'
+import { categoryAPI, quoteAPI, userAPI } from '@/lib/api'
 import { BsChatSquareQuote } from 'react-icons/bs'
 import { HiOutlineViewGridAdd, HiOutlineUsers } from 'react-icons/hi'
 import { QuoteData } from '@/domain/quote'
@@ -12,12 +12,14 @@ const cardIconClasses = 'w-8 h-8 text-white'
 export const getServerSideProps: GetServerSideProps = async () => {
   const categoriesTotal = await categoryAPI.count()
   const quotesTotal = await quoteAPI.count()
+  const usersTotal = await userAPI.count()
   const quotes = await quoteAPI.findAll()
 
   return {
     props: {
       categoriesTotal,
       quotesTotal,
+      usersTotal,
       quotes
     }
   }
@@ -26,10 +28,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
 type Props = {
   categoriesTotal: number
   quotesTotal: number
+  usersTotal: number
   quotes: QuoteData[]
 }
 
-export default function Home ({ categoriesTotal, quotesTotal, quotes }: Props) {
+export default function Home ({ categoriesTotal, quotesTotal, usersTotal, quotes }: Props) {
   const [session, loading] = useSession()
 
   if (loading) {
@@ -63,7 +66,7 @@ export default function Home ({ categoriesTotal, quotesTotal, quotes }: Props) {
           />
 
           <Card
-            title='1'
+            title={String(usersTotal)}
             subtitle='Usuários'
             icon={<HiOutlineUsers className={cardIconClasses} />}
             bgIcon='bg-yellow-500'

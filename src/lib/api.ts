@@ -83,3 +83,7 @@ export const quoteAPI = {
 
   count: async () => await fetchAPI('/quotes/count', { method: 'GET' })
 }
+
+export const userAPI = {
+  count: async () => await fetchAPI('/users/count', { method: 'GET' })
+}
