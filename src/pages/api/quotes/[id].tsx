@@ -27,7 +27,13 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         }
       })
 
-      if (quoteExists) {
+      const currentQuote = await prisma.quote.findUnique({
+        where: {
+          id: quoteId
+        }
+      })
+
+      if (quoteExists && quoteExists.content !== currentQuote.content) {
         return res.status(400).json({ error: 'Frase já existe' })
       }
 
