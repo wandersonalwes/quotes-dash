@@ -1,14 +1,35 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/lib/prisma'
 import { getSession } from 'next-auth/client'
+import { Prisma } from '@prisma/client'
+import { paramNumber } from '@/utils/paramNumber'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET': {
+      const match = {} as Prisma.QuoteWhereInput
+
+      if (req.query.published) {
+        match.published = req.query.published === 'true'
+      }
+
+      if (req.query.userId) {
+        match.user = { id: paramNumber(req.query.userId) }
+      }
+
+      if (req.query.categoryId) {
+        match.categories = {
+          some: {
+            id: paramNumber(req.query.categoryId)
+          }
+        }
+      }
+
       const perPage = 20
       const page = Number(req.query.page) - 1 || 0
 
       const quotes = await prisma.quote.findMany({
+        where: match,
         orderBy: {
           content: 'asc'
         },
