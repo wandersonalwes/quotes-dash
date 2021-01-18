@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getSession } from 'next-auth/client'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   const quoteId = Number(req.query.id)
@@ -62,7 +63,26 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     }
 
     case 'DELETE': {
-      const quote = await prisma.quote.delete({
+      const session = await getSession({ req })
+
+      const quote = await prisma.quote.findUnique({
+        where: {
+          id: quoteId
+        },
+        include: {
+          user: true
+        }
+      })
+
+      if (!quote) {
+        return res.status(400).json({ error: 'Frase não encontrada' })
+      }
+
+      if (!session.user.isAdmin && quote.user.id !== session.user.id) {
+        return res.status(401).json({ error: 'Sem autorização para realizar está ação' })
+      }
+
+      await prisma.quote.delete({
         where: {
           id: quoteId
         }

@@ -71,7 +71,12 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
     },
     delete: async (id: number) => {
       try {
-        await quoteAPI.delete(id)
+        const response = await quoteAPI.delete(id)
+
+        if (response.error) {
+          return toast.error(response.error)
+        }
+
         toast.success('Frase excluída com sucesso')
         router.push('/quotes')
       } catch (error) {
