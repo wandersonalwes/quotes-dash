@@ -39,6 +39,9 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         skip: perPage * page,
         take: perPage
       })
+
+      res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate')
+
       return res.json(quotes)
     }
 

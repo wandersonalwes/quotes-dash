@@ -38,6 +38,8 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         name: 'asc'
       }
     })
+    res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate')
+
     res.json(categories)
   } else {
     throw new Error(
