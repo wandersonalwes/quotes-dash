@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="#rocket-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#memo-licenca">Licença</a>
+  <a href="#memo-licença">Licença</a>
 </p>
 
 <p align="center">
