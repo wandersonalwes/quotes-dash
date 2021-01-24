@@ -27,6 +27,26 @@ Uma plataforma de publicação de frases, com suporte a vários usuários e com 
 - [TailwindCSS](https://tailwindcss.com/)
 - [TypeScript](https://www.typescriptlang.org/)
 
+## API 
+
+**API**: [https://quotes.wandersonalwes.com.br/api](https://quotes.wandersonalwes.com.br/api)
+
+---
+ 
+| Método | Rota | Descrição | Tipo
+|--|--|--|--|
+| GET | /quotes/random | Citação aleatória | Pública 
+| GET | /quotes | Lista citações | Pública
+| GET | /quotes/:id | Lista uma citação especifica | Pública
+| POST | /quotes | Criar citação | Privada
+| DELETE | /quotes/:id | Excluir uma citação | Privada
+| PUT | /quotes/:id | Editar uma citação | Privada
+| GET | /categories | Lista categorias | Pública
+| GET | /categories/:id | Lista uma categoria especifica | Pública
+| POST | /categories | Criar categoria | Privada
+| DELETE | /categories/:id | Excluir categoria | Privada
+| PUT | /categories/:id | Editar categoria | Privada 
+
 # :memo: Licença
 
 Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
