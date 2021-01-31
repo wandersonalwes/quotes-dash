@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma'
 import { getSession } from 'next-auth/client'
 import { Prisma } from '@prisma/client'
 import { paramNumber } from '@/utils/paramNumber'
+import { paramString } from '@/utils/paramString '
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
@@ -13,20 +14,28 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         match.published = req.query.published === 'true'
       }
 
-      if (req.query.userId) {
-        match.user = { id: paramNumber(req.query.userId) }
+      if (req.query.user_id) {
+        match.user = { id: paramNumber(req.query.user_id) }
       }
 
-      if (req.query.categoryId) {
+      if (req.query.category_id) {
         match.categories = {
           some: {
-            id: paramNumber(req.query.categoryId)
+            id: paramNumber(req.query.category_id)
           }
         }
       }
 
-      const perPage = 20
-      const page = Number(req.query.page) - 1 || 0
+      if (req.query.category_name) {
+        match.categories = {
+          some: {
+            name: paramString(req.query.category_name)
+          }
+        }
+      }
+
+      const perPage = paramNumber(req.query.per_page) || 20
+      const page = paramNumber(req.query.page) - 1 || 0
 
       const quotes = await prisma.quote.findMany({
         where: match,

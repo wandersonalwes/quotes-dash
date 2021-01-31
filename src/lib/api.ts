@@ -53,8 +53,8 @@ export const categoryAPI = {
 }
 
 export const quoteAPI = {
-  findAll: async (): Promise<QuoteData[]> => {
-    return await fetchAPI('/quotes', { method: 'GET' })
+  findAll: async (query = ''): Promise<QuoteData[]> => {
+    return await fetchAPI(`/quotes${query}`, { method: 'GET' })
   },
 
   findByID: async (id: ParamID): Promise<QuoteData> => {
