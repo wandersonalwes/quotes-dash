@@ -73,15 +73,24 @@ export default function Quotes ({ page, totalQuotes, quotes }: QuotesProps) {
       <div className="flex flex-col mt-8">
         <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div className="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg ">
-            <Table columns={['ID', 'Conteúdo', '']}>
+            <Table columns={['ID', 'Conteúdo', 'Status', '']}>
 
               <tbody className="bg-white">
-                {quotes.length > 0 && quotes.map(({ id, content }) => (
+                {quotes.length > 0 && quotes.map(({ id, content, published }) => (
                   <tr key={id} className="border-b border-gray-200">
                     <td className="px-6 py-4 whitespace-no-wrap ">{id}</td>
 
                     <td className="px-6 py-4 whitespace-no-wrap w-64 block">
                       <p className="truncate">{content}</p>
+                    </td>
+                    <td>{published
+                      ? (
+                        <p className="bg-green-100 text-green-800 rounded-full px-4 py-1 text-center inline text-sm">Publicado</p>
+                        )
+                      : (
+                      <p className="bg-yellow-100 text-yellow-800 rounded-full px-4 py-1 text-center inline text-sm">Pendente</p>
+                        )}
+
                     </td>
                     <td
                       className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
