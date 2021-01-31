@@ -8,6 +8,7 @@ import { quoteAPI } from '@/lib/api'
 import { CreateQuoteData, QuoteData } from '@/domain/quote'
 import { CategoryData } from '@/domain/category'
 import { toast } from 'react-toastify'
+import { useSession } from 'next-auth/client'
 
 interface QuoteProps {
   quote?: QuoteData
@@ -17,9 +18,11 @@ interface QuoteProps {
 interface UpdateQuoteData {
   content: string
   selectedCategories: string[]
+  published: boolean
 }
 
 const Quote: FC<QuoteProps> = ({ quote, categories }) => {
+  const [session] = useSession()
   const isQuote = typeof quote !== 'undefined'
   const router = useRouter()
   const currentCategoryNames = quote?.categories.map(({ name }) => name)
@@ -41,9 +44,9 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
         toast.error('Error interno do servidor')
       }
     },
-    update: async (id: number, data: UpdateQuoteData) => {
+    update: async (id: number, data: UpdateQuoteData & {selectedCategories: string[]}) => {
       try {
-        const { content, selectedCategories } = data
+        const { content, selectedCategories, published } = data
 
         const connectCategories = selectedCategories.filter(selectedCategoryName => {
           return !currentCategoryNames.some((currentCategoryName: string) => currentCategoryName === selectedCategoryName)
@@ -56,7 +59,8 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
         const response = await quoteAPI.update(id, {
           content,
           connectCategories,
-          disconnectCategories
+          disconnectCategories,
+          published
         })
 
         if (response.error) {
@@ -90,14 +94,15 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
       <Formik
         initialValues={{
           content: isQuote ? quote.content : '',
-          selectedCategories: isQuote ? currentCategoryNames : []
+          selectedCategories: isQuote ? currentCategoryNames : [],
+          published: isQuote ? quote.published : true
         }}
         validationSchema={QuoteSchema}
-        onSubmit={({ content, selectedCategories }) => isQuote
-          ? handleQuote.update(quote.id, { content, selectedCategories })
-          : handleQuote.create({ content, connectCategories: selectedCategories })}
+        onSubmit={({ content, selectedCategories, published }) => isQuote
+          ? handleQuote.update(quote.id, { content, selectedCategories, published })
+          : handleQuote.create({ content, connectCategories: selectedCategories, published })}
       >
-        {({ values, handleChange, errors }) => (
+        {({ values, handleChange, errors, setFieldValue }) => (
 
           <Form>
             <HeaderPage
@@ -138,6 +143,40 @@ const Quote: FC<QuoteProps> = ({ quote, categories }) => {
               </div>
               <div className="col-span-3 md:col-span-1">
                 <div className="bg-white shadow rounded-md py-4 px-6">
+
+                  {session.user.isAdmin && (
+                    <>
+                      <h2 className="text-sm font-medium text-gray-700  mb-2">Status</h2>
+                      <ul className="border-b mb-4 pb-4">
+                        <li>
+                          <label htmlFor="true">
+                            <input
+                              type="radio"
+                              name="status"
+                              id="true"
+                              checked={values.published}
+                              onChange={() => setFieldValue('published', true)}
+                            />
+
+                            <span className="text-sm text-gray-800 ml-2">Publicado</span>
+                          </label>
+                        </li>
+                        <li>
+                          <label htmlFor="false">
+                            <input
+                              type="radio"
+                              name="status"
+                              id="false"
+                              checked={!values.published}
+                              onChange={() => setFieldValue('published', false)}
+                            />
+                            <span className="text-sm text-gray-800 ml-2">Rascunho</span>
+                          </label>
+                        </li>
+                      </ul>
+                    </>
+                  )}
+
                   <div className="relative">
                     <label htmlFor="categories" className="text-sm font-medium text-gray-700">Categorias</label>
 

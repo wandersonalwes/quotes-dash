@@ -55,7 +55,7 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     }
 
     case 'POST': {
-      const { content, connectCategories } = req.body
+      const { content, connectCategories, published } = req.body
 
       const session = await getSession({ req })
 
@@ -78,6 +78,7 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
                 name: categoryName
               }))
             },
+            published: session.user.isAdmin ? published : quoteExists.published,
             user: {
               connect: { id: session.user.id }
             }

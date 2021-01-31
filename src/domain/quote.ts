@@ -13,10 +13,12 @@ export interface QuoteData {
 export interface CreateQuoteData {
   content: string
   connectCategories: string[]
+  published: boolean
 }
 
 export interface UpdateQuoteData {
   content: string
   connectCategories: string[]
   disconnectCategories: string[]
+  published: boolean
 }

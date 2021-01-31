@@ -24,7 +24,8 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     }
 
     case 'PUT': {
-      const { content, connectCategories, disconnectCategories } = req.body
+      const session = await getSession({ req })
+      const { content, connectCategories, disconnectCategories, published } = req.body
 
       const quoteExists = await prisma.quote.findUnique({
         where: {
@@ -55,7 +56,8 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
             disconnect: disconnectCategories.map((categoryName: string) => ({
               name: categoryName
             }))
-          }
+          },
+          published: session.user.isAdmin ? published : quoteExists.published
         }
       })
 

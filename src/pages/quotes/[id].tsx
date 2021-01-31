@@ -1,4 +1,6 @@
 import { Quote, AccessDenied, Loading } from '@/components'
+import { CategoryData } from '@/domain/category'
+import { QuoteData } from '@/domain/quote'
 import { categoryAPI, quoteAPI } from '@/lib/api'
 import { GetServerSideProps } from 'next'
 import { useSession } from 'next-auth/client'
@@ -16,7 +18,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
 }
 
-const QuotePage = ({ categories, quote }) => {
+interface QuotePageProps {
+  categories: CategoryData[]
+  quote: QuoteData & {
+    error?: string
+  }
+}
+
+const QuotePage = ({ categories, quote }: QuotePageProps) => {
   const [session, loading] = useSession()
 
   if (loading) {
@@ -27,7 +36,7 @@ const QuotePage = ({ categories, quote }) => {
     return <AccessDenied />
   }
 
-  if (quote.error) {
+  if (quote.error || (session.user.id !== quote.userId && !session.user.isAdmin)) {
     return <NextError statusCode={404} />
   }
 
