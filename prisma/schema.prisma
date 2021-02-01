@@ -85,3 +85,11 @@ model Quote {
 
   @@map("quotes")
 }
+
+model Daily {
+  id        Int      @id @default(autoincrement())
+  content   String   @unique
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@map("daily")
+}
