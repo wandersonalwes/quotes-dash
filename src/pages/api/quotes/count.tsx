@@ -1,9 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '../../../lib/prisma'
+import { Prisma } from '@prisma/client'
+import { paramNumber } from '@/utils/paramNumber'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const total = await prisma.quote.count()
+    const match = {} as Prisma.QuoteWhereInput
+
+    if (req.query.user_id) {
+      match.user = { id: paramNumber(req.query.user_id) }
+    }
+
+    const total = await prisma.quote.count({
+      where: match
+    })
     return res.json(total)
   } else {
     throw new Error(

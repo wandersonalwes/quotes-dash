@@ -81,7 +81,10 @@ export const quoteAPI = {
     })
   },
 
-  count: async () => await fetchAPI('/quotes/count', { method: 'GET' })
+  count: async (userId?: number) => {
+    const hasUserId = typeof userId !== 'undefined' ? `?user_id=${userId}` : ''
+    return await fetchAPI(`/quotes/count${hasUserId}`, { method: 'GET' })
+  }
 }
 
 export const userAPI = {

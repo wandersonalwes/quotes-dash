@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { GetServerSideProps } from 'next'
 import { QuoteData } from '@/domain/quote'
 import { quoteAPI } from '@/lib/api'
-import { useSession } from 'next-auth/client'
+import { getSession, useSession } from 'next-auth/client'
 import AccessDenied from '@/components/AccessDenied'
 import Loading from '@/components/Loading'
 import NextError from 'next/error'
@@ -16,9 +16,13 @@ import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 
 const perPage = 20
 
-export const getServerSideProps: GetServerSideProps = async ({ query: { page = 1 } }) => {
-  const totalQuotes = await quoteAPI.count()
-  const quotes = await quoteAPI.findAll(`?per_page=${perPage}&page=${page}`)
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getSession(ctx)
+
+  const userId = session.user.isAdmin ? '' : `&user_id=${session.user.id}`
+  const page = ctx.query.page || 1
+  const totalQuotes = await quoteAPI.count(!session.user.isAdmin ? session.user.id : undefined)
+  const quotes = await quoteAPI.findAll(`?per_page=${perPage}&page=${page}${userId}`)
 
   return {
     props: {
@@ -76,30 +80,32 @@ export default function Quotes ({ page, totalQuotes, quotes }: QuotesProps) {
             <Table columns={['ID', 'Conteúdo', 'Status', '']}>
 
               <tbody className="bg-white">
-                {quotes.length > 0 && quotes.map(({ id, content, published }) => (
+                {quotes.length > 0 && quotes.map(({ id, content, published, userId }) => (
                   <tr key={id} className="border-b border-gray-200">
                     <td className="px-6 py-4 whitespace-no-wrap ">{id}</td>
 
                     <td className="px-6 py-4 whitespace-no-wrap w-64 block">
                       <p className="truncate">{content}</p>
                     </td>
-                    <td>{published
-                      ? (
+                    <td>
+                      {published && (
                         <p className="bg-green-100 text-green-800 rounded-full px-4 py-1 text-center inline text-sm">Publicado</p>
-                        )
-                      : (
-                      <p className="bg-yellow-100 text-yellow-800 rounded-full px-4 py-1 text-center inline text-sm">Pendente</p>
-                        )}
-
+                      )}
+                      {!published && (
+                        <p className="bg-yellow-100 text-yellow-800 rounded-full px-4 py-1 text-center inline text-sm">Pendente</p>
+                      )}
                     </td>
                     <td
                       className="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                      <Link href={`/quotes/${id}`}>
-                        <a className="text-indigo-600 hover:text-indigo-900">Editar</a>
-                      </Link>
+                      {(session.user.id === userId || session.user.isAdmin) && (
+                        <Link href={`/quotes/${id}`}>
+                          <a className="text-indigo-600 hover:text-indigo-900">Editar</a>
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 ))}
+
               </tbody>
             </Table>
 
