@@ -32,7 +32,7 @@ const handle: NextApiHandler = async (req, res) => {
         where: { id: 1 },
         data: {
           content: random.content,
-          updatedAt: Date()
+          updatedAt: new Date()
         }
       })
 
