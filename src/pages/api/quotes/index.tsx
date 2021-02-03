@@ -18,10 +18,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         match.user = { id: paramNumber(req.query.user_id) }
       }
 
-      if (req.query.category_id) {
+      if (req.query.category_id || req.query.categoryId) {
         match.categories = {
           some: {
-            id: paramNumber(req.query.category_id)
+            id: paramNumber(req.query.category_id) || paramNumber(req.query.categoryId)
           }
         }
       }
