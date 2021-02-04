@@ -68,7 +68,7 @@ model Category {
   name      String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
-  slug      String?  @unique
+  slug      String   @unique
   quotes    Quote[]
 
   @@map("categories")
