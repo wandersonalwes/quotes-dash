@@ -63,7 +63,7 @@ const Category: FC<CategoryProps> = ({ category }) => {
       <Formik
         initialValues={{
           name: isCategory ? category.name : '',
-          slug: isCategory ? category.slug : ''
+          slug: isCategory ? category?.slug || category.name : ''
         }}
         validationSchema={CategorySchema}
         onSubmit={(values) => isCategory ? handleCategory.update(category.id, values.name, values.slug) : handleCategory.create(values.name, values.slug)}

@@ -22,7 +22,7 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     }
 
     case 'PUT': {
-      const { name } = req.body
+      const { name, slug } = req.body
 
       if (!session.user.isAdmin) {
         return res.status(403).json({ error: 'Sem permissão para realizar está ação' })
@@ -49,7 +49,8 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
           id: categoryId
         },
         data: {
-          name
+          name,
+          slug
         }
       })
 
