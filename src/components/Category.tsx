@@ -103,7 +103,7 @@ const Category: FC<CategoryProps> = ({ category }) => {
                     value={values.name}
                     onChange={({ target }) => {
                       setFieldValue('name', target.value)
-                      setFieldValue('slug', target.value)
+                      setFieldValue('slug', slugify(target.value, { lower: true }))
                     }}
                     placeholder="Adicione uma frase aqui..."
                     errorMessage={errors.name && errors.name.toString()}

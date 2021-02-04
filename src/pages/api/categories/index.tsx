@@ -2,6 +2,7 @@ import { NextApiResponse } from 'next'
 import { NextApiRequest } from 'next-auth/_utils'
 import prisma from '@/lib/prisma'
 import { getSession } from 'next-auth/client'
+import slugify from 'slugify'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
@@ -26,7 +27,7 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     const category = await prisma.category.create({
       data: {
         name,
-        slug
+        slug: slugify(slug, { lower: true })
       }
     })
 

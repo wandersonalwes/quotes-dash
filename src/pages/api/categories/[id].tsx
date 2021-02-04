@@ -1,6 +1,7 @@
 import prisma from '../../../lib/prisma'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
+import slugify from 'slugify'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   const categoryId = Number(req.query.id)
@@ -50,7 +51,7 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         },
         data: {
           name,
-          slug
+          slug: slugify(slug, { lower: true })
         }
       })
 
