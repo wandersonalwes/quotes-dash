@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client'
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { name } = req.body
+    const { name, slug } = req.body
 
     const session = await getSession({ req })
 
@@ -25,7 +25,8 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
 
     const category = await prisma.category.create({
       data: {
-        name
+        name,
+        slug
       }
     })
 
