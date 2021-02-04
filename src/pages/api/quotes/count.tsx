@@ -11,6 +11,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
       match.user = { id: paramNumber(req.query.user_id) }
     }
 
+    if (req.query.category_id) {
+      match.categories = { some: { id: paramNumber(req.query.category_id) } }
+    }
+
     const total = await prisma.quote.count({
       where: match
     })
