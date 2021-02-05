@@ -26,6 +26,14 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
         }
       }
 
+      if (req.query.category_slug) {
+        match.categories = {
+          some: {
+            slug: paramString(req.query.category_slug)
+          }
+        }
+      }
+
       if (req.query.category_name) {
         match.categories = {
           some: {
